@@ -1,4 +1,0 @@
-2024-Oct-24-00:06:16 : Extraction Started - Loading data from CSV
-2024-Oct-24-00:06:19 : Extraction Ended - Loaded data from CSV
-2024-Oct-24-00:06:19 : EDA process for the day started
-2024-Oct-24-00:06:52 : EDA process for the day ended
