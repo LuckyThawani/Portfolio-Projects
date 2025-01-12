@@ -1,10 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# ![Screenshot%202025-01-12%20at%209.21.01%E2%80%AFAM.png](attachment:Screenshot%202025-01-12%20at%209.21.01%E2%80%AFAM.png)
-
-# In[ ]:
-
 
 # Import libraries
 from datetime import datetime, timedelta
