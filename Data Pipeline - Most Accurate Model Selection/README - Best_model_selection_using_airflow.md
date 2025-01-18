@@ -1,4 +1,4 @@
-Here’s a detailed README document for the provided code:
+Explanation document for the code:
 
 ---
 
@@ -132,5 +132,3 @@ This project demonstrates:
 2. Leveraging `BranchPythonOperator` for dynamic branching in DAGs.
 3. Applying `xcom_pull` to share data between tasks.
 4. Combining Python and Bash commands for flexible workflow design.
-
-Feel free to include this in your project portfolio to showcase your proficiency in Airflow and workflow automation! Let me know if you'd like further customization.
