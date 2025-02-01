@@ -1,1 +1,20 @@
 
+🚀 Leveling Up in Data Engineering! 🚀
+
+Grateful to have access to incredible learning platforms like Coursera, YouTube, and Udemy—they've truly made my upskilling journey seamless! A few weeks ago, I set out to deepen my expertise in Data Engineering, focusing on Apache Airflow (DAGs) and Amazon Web Services (AWS), including EC2, S3, and Lambda. I'm excited to share that I recently completed a project under the digital mentorship of TupleSpectra, where I put my learnings into action.
+
+Here are some key takeaways from my project:
+
+🔹 Data Extraction via APIs – Integrated data pipelines using OpenWeather API for real-time weather data. (Had my eye on Twitter’s API too, but thanks to the Musk takeover, it became a paid service—so, pivoted accordingly! 😆)
+
+🔹 Apache Airflow Workflow Automation – Explored Airflow's core functionalities and hands-on experience with operators like PythonOperator, BashOperator, and HttpOperator.
+
+🔹 AWS EC2 with Auto-Scaling – Configured EC2 instances with automatic scaling to efficiently manage fluctuating workloads.
+
+🔹 AWS IAM & S3 – Created and managed IAM roles and S3 Buckets for secure and structured data storage.
+
+🔹 AWS Lambda & Event-Driven Architecture – Scheduled a daily Apache Airflow DAG to load data into S3, then leveraged AWS Lambda triggers to detect new CSV files and execute a Python script for incremental updates on weather trends.
+
+This journey took me just 30 focused minutes a day over the last two weeks—a slow but deliberate learning process to grasp every detail. And it was absolutely worth it! 💡
+
+The world of Data Engineering is vast, and this is just the beginning! Looking forward to more hands-on projects and deeper dives into cloud technologies.
