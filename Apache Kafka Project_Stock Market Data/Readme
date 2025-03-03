@@ -1,1 +1,66 @@
 
+# Kafka Producer & Consumer with AWS S3 Integration
+
+## Overview
+This repository contains Python scripts for implementing a Kafka Producer and Consumer. The producer reads data from a CSV file and sends messages to a Kafka topic, while the consumer listens for messages and stores them in an AWS S3 bucket.
+
+## Prerequisites
+- Python 3.9
+- Kafka setup and running on a server (Please check the Initial Terminal Setup file in the repository for the configuration)
+- AWS credentials configured for accessing S3
+- Required Python packages:
+  ```bash
+  pip install kafka-python pandas s3fs
+  ```
+
+## File Descriptions
+- **KafkaProducer.py**: Reads data from a CSV file and publishes messages to a Kafka topic.
+- **KafkaConsumer.py**: Consumes messages from Kafka and stores them in an AWS S3 bucket.
+
+## Setup Instructions
+### 1. Start Kafka and Zookeeper
+Ensure Kafka and Zookeeper are running before executing the scripts.
+```bash
+bin/zookeeper-server-start.sh config/zookeeper.properties &
+bin/kafka-server-start.sh config/server.properties &
+```
+
+### 2. Create a Kafka Topic
+```bash
+bin/kafka-topics.sh --create --topic demo_testing2 --bootstrap-server <BROKER_IP>:9092 --partitions 1 --replication-factor 1
+```
+
+### 3. Run the Producer
+Modify the CSV file path in `KafkaProducer.py` if necessary, then execute:
+```bash
+python KafkaProducer.py
+```
+
+### 4. Run the Consumer
+Modify the AWS S3 bucket details in `KafkaConsumer.py`, then execute:
+```bash
+python KafkaConsumer.py
+```
+
+## Configuration Details
+- **KafkaProducer.py**
+  - Reads stock market data from a CSV file
+  - Sends messages to the Kafka topic `demo_testing2`
+- **KafkaConsumer.py**
+  - Listens to the Kafka topic `demo_testing2`
+  - Stores received messages as JSON files in an AWS S3 bucket
+
+## AWS S3 Integration
+Ensure AWS credentials are configured properly to allow access to the S3 bucket. Modify the bucket name in `KafkaConsumer.py` to match your setup.
+
+## Stopping Kafka and Zookeeper
+To stop Kafka and Zookeeper, use:
+```bash
+bin/kafka-server-stop.sh
+bin/zookeeper-server-stop.sh
+```
+
+## Author
+Lucky Thawani - Data Engineer
+
+
