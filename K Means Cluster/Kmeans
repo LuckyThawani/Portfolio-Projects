@@ -1,1 +1,226 @@
+# K-Means Clustering Project: Age vs Income Segmentation
+
+## Overview
+
+This project demonstrates how to apply **K-Means Clustering** using Python to segment individuals based on **Age** and **Income**.
+
+The notebook walks through the full workflow of an unsupervised machine learning project:
+
+1. Loading and exploring the dataset
+2. Visualizing the relationship between age and income
+3. Applying K-Means clustering
+4. Scaling the data using MinMaxScaler
+5. Re-running the clustering on normalized data
+6. Using the **Elbow Method** to determine the optimal number of clusters
+
+The goal is to group individuals with similar characteristics into clusters.
+
+---
+
+## Dataset
+
+The dataset used is **income.csv**, which contains the following columns:
+
+| Column    | Description              |
+| --------- | ------------------------ |
+| Age       | Age of the individual    |
+| Income($) | Annual income in dollars |
+
+Example:
+
+| Age | Income($) |
+| --- | --------- |
+| 25  | 40000     |
+| 30  | 50000     |
+| 40  | 65000     |
+
+---
+
+## Project Workflow
+
+### 1. Import Required Libraries
+
+The project uses the following Python libraries:
+
+* pandas – data manipulation
+* matplotlib – data visualization
+* scikit-learn – machine learning algorithms
+
+```python
+from sklearn.cluster import KMeans
+import pandas as pd
+from sklearn.preprocessing import MinMaxScaler
+```
+
+---
+
+### 2. Load Dataset
+
+The dataset is loaded using pandas.
+
+```python
+df = pd.read_csv("income.csv")
+```
+
+---
+
+### 3. Data Visualization
+
+A scatter plot is used to visualize the relationship between **Age** and **Income**.
+
+```python
+plt.scatter(df.Age, df['Income($)'])
+plt.xlabel('Age')
+plt.ylabel('Income($)')
+```
+
+This helps visually identify potential clusters in the data.
+
+---
+
+### 4. Applying K-Means Clustering
+
+We initially assume **3 clusters** and fit the K-Means model.
+
+```python
+km = KMeans(n_clusters=3)
+y_predicted = km.fit_predict(df[['Age','Income($)']])
+```
+
+Cluster labels are then added to the dataset.
+
+```python
+df['cluster'] = y_predicted
+```
+
+Each data point now belongs to one of the clusters.
+
+---
+
+### 5. Cluster Centers
+
+The cluster centroids can be viewed using:
+
+```python
+km.cluster_centers_
+```
+
+These represent the **average Age and Income values** for each cluster.
+
+---
+
+### 6. Data Preprocessing (Feature Scaling)
+
+Before clustering, it is often helpful to normalize features to ensure equal importance.
+
+This project uses **MinMaxScaler**:
+
+```python
+scaler = MinMaxScaler()
+scaler.fit(df[['Income($)']])
+df['Income($)'] = scaler.transform(df[['Income($)']])
+```
+
+Scaling ensures both **Age and Income contribute proportionally** to clustering.
+
+---
+
+### 7. Re-running K-Means
+
+After scaling the data, K-Means is applied again:
+
+```python
+km = KMeans(n_clusters=3)
+y_predicted = km.fit_predict(df[['Age','Income($)']])
+df['cluster'] = y_predicted
+```
+
+This produces more balanced clusters.
+
+---
+
+### 8. Elbow Method for Optimal Clusters
+
+The **Elbow Method** helps determine the best number of clusters.
+
+It works by calculating **Sum of Squared Errors (SSE)** for different values of K.
+
+```python
+sse = []
+k_rng = range(1,10)
+
+for k in k_rng:
+    km = KMeans(n_clusters=k)
+    km.fit(df[['Age','Income($)']])
+    sse.append(km.inertia_)
+```
+
+Plotting SSE vs K:
+
+```python
+plt.plot(k_rng, sse)
+plt.xlabel('K')
+plt.ylabel('Sum of squared error')
+```
+
+The optimal K is typically where the curve forms an **"elbow"**.
+
+---
+
+## Project Structure
+
+```
+KMeans-Age-Income-Clustering
+│
+├── KmeansCluster_age_vs_income.ipynb
+├── income.csv
+└── README.md
+```
+
+---
+
+## Requirements
+
+Install the required libraries before running the notebook.
+
+```bash
+pip install pandas matplotlib scikit-learn
+```
+
+---
+
+## How to Run
+
+1. Clone the repository
+
+```bash
+git clone <repository-url>
+```
+
+2. Navigate to the project directory
+
+3. Open the notebook
+
+```bash
+jupyter notebook
+```
+
+4. Run all cells in:
+
+```
+KmeansCluster_age_vs_income.ipynb
+```
+
+---
+
+## Key Concepts Demonstrated
+
+* Unsupervised Learning
+* K-Means Clustering
+* Cluster Centroids
+* Feature Scaling
+* MinMax Normalization
+* Elbow Method
+
+---
 
