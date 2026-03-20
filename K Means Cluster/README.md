@@ -175,9 +175,6 @@ jupyter notebook
 
 4.  Run all cells in:
 
-```{=html}
-<!-- -->
-```
     KmeansCluster_age_vs_income.ipynb
 
 ------------------------------------------------------------------------
