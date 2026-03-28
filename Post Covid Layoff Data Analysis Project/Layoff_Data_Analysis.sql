@@ -1,64 +1,119 @@
--- Exploratory Data Analysis --
+# Q1. Total layoffs by company:  Find total layoffs per company and sort descending.
 
--- Find out the details of the company where maximum number of people which were laid off in a single day
+SELECT
+	company,
+    SUM(total_laid_off) as total_layoffs
 
-Select *
 FROM Layoffs.layoffs
-ORDER BY total_laid_off DESC
-LIMIT 1;
-
--- Find out the details of the company where 100% of the population was laid off
-
-SELECT * 
-FROM Layoffs.layoffs
-WHERE percentage_laid_off = 1;
-
--- Find out the overall number of employees laid off by the companies
-
-Select company, SUM(total_laid_off)
-FROM Layoffs.layoffs
+WHERE total_laid_off IS NOT NULL
 GROUP BY company
-ORDER BY 2 DESC;
+ORDER BY total_layoffs DESC;
 
--- Find out which industries were impacted the most
+# Q2. Top 5 companies with highest layoffs: Return top 5 companies by total layoffs.
 
-SELECT industry,SUM(total_laid_off)
+SELECT
+	company,
+    SUM(total_laid_off) as total_layoffs
+
 FROM Layoffs.layoffs
+WHERE total_laid_off IS NOT NULL
+GROUP BY company
+ORDER BY total_layoffs DESC
+LIMIT 5;
+
+# Q3. Layoffs trend over time (monthly) : Find total layoffs per month.
+
+SELECT
+    DATE_FORMAT(STR_TO_DATE(date, '%m/%d/%Y'), '%Y-%m') AS month,
+    SUM(total_laid_off) AS total_layoffs
+FROM Layoffs.layoffs
+GROUP BY month
+ORDER BY month;
+
+#Q4. Industry-wise layoffs share : Calculate total layoffs per industry and % contribution.
+
+SELECT
+    industry,
+    SUM(total_laid_off) AS total_layoffs,
+    (SUM(total_laid_off)  / SUM(SUM(total_laid_off)) OVER () ) *100 AS pct_contribution
+FROM Layoffs.layoffs
+WHERE total_laid_off IS NOT NULL
 GROUP BY industry
-ORDER BY 2 DESC;
+ORDER BY pct_contribution DESC;
 
--- Find out which country was impacted the most
+#Q5. Companies with layoffs above industry average: Find companies whose layoffs are above the average layoffs of their industry.
 
-SELECT country,SUM(total_laid_off)
+SELECT *
+FROM (
+    SELECT
+        company,
+        industry,
+        SUM(total_laid_off) AS total_layoffs,
+        AVG(SUM(total_laid_off)) OVER (PARTITION BY industry) AS avg_industry_layoffs
+    FROM Layoffs.layoffs
+    WHERE total_laid_off IS NOT NULL
+    GROUP BY company, industry
+) t
+WHERE total_layoffs > avg_industry_layoffs;
+
+#Q6. Rank companies by layoffs within each country.
+
+SELECT
+
+	company,
+    country,
+    SUM(total_laid_off) AS total_layoffs,
+    DENSE_RANK() OVER (PARTITION BY country ORDER BY SUM(total_laid_off) DESC) AS ranking
 FROM Layoffs.layoffs
-GROUP BY country
-ORDER BY 2 DESC;
+    WHERE total_laid_off IS NOT NULL
+    GROUP BY company, country  
+    
+#Q7. Calculate cumulative layoffs by date OR over time (Running Total, to find out overall layoffs progression)
 
--- Find out total layoffs per year
+SELECT
 
-SELECT YEAR('DATE'), SUM(total_laid_off)
+	STR_TO_DATE(date, '%m/%d/%Y') AS date,
+    SUM(total_laid_off) AS total_layoffs,
+    SUM(SUM(total_laid_off)) OVER (
+        ORDER BY STR_TO_DATE(date, '%m/%d/%Y')
+    ) AS cumulative_layoffs
 FROM Layoffs.layoffs
-GROUP BY YEAR('DATE')
-ORDER BY 1;
+    WHERE total_laid_off IS NOT NULL
+    GROUP BY date 
+    
+    
+#Q8. Identify Layoff Spikes (Day-over-Day Increase). Find days where layoffs increased compared to previous day
 
--- Rolling Total of Layoffs Per Month
+SELECT *
+FROM (
+    SELECT
+        date,
+        total_layoffs,
+        LAG(total_layoffs) OVER (ORDER BY date) AS prev_day_layoffs
+    FROM (
+        SELECT
+            date,
+            SUM(total_laid_off) AS total_layoffs
+        FROM layoffs
+        WHERE total_laid_off IS NOT NULL
+        GROUP BY date
+    ) t1
+) t2
+WHERE total_layoffs > prev_day_layoffs;
 
-SELECT SUBSTRING(date,1,7) as dates, SUM(total_laid_off) AS total_laid_off
-FROM Layoffs.layoffs
-GROUP BY dates
-ORDER BY dates ASC;
 
--- Now use it in a CTE so we can query off of it
 
-WITH DATE_CTE AS 
-(
-SELECT SUBSTRING(date,1,7) as dates, SUM(total_laid_off) AS total_laid_off
-FROM Layoffs.layoffs
-GROUP BY dates
-ORDER BY dates ASC
-)
-SELECT dates, SUM(total_laid_off) OVER (ORDER BY dates ASC) as rolling_total_layoffs
-FROM DATE_CTE
-ORDER BY dates ASC;
+
+
+
+
+
+
+
+
+
+
+
+
 
 
